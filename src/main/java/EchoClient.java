@@ -21,16 +21,19 @@ public class EchoClient {
     }
 
     public void start() throws Exception{
+        final EchoClientHandler clientHandler = new EchoClientHandler();
         EventLoopGroup group = new NioEventLoopGroup();
+
         try{
             Bootstrap b = new Bootstrap();
             b.group(group)
                     .channel(NioSocketChannel.class)
                     .remoteAddress(new InetSocketAddress(host,port))
                     .handler(new ChannelInitializer<SocketChannel>() {
+
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(
-                                    new EchoClientHandler());
+                                    clientHandler);
                         }
                     });
             ChannelFuture f = b.connect().sync();
