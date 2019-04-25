@@ -32,10 +32,11 @@ public class EchoServer {
     }
 
     public void start() throws Exception {
-        final EchoServerHandler serverHandler = new EchoServerHandler();
-        EventLoopGroup group = new NioEventLoopGroup();
+        final EchoServerHandler serverHandler = new EchoServerHandler();//Hnadler处理逻辑
+        EventLoopGroup group = new NioEventLoopGroup();//EventLoop组
         try {
-            ServerBootstrap b = new ServerBootstrap();
+            ServerBootstrap b = new ServerBootstrap();//引导
+            //组装引导、EventLoopGroup、channel类型、地址、ChannelHandler调用链
             b.group(group).channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -43,12 +44,15 @@ public class EchoServer {
                         @Override
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
-                            ch.pipeline().addLast(serverHandler);
+                            ch.pipeline().addLast(serverHandler);//pipeline: ChannelHandler链
                         }
                     });
+            //引导执行
             ChannelFuture f = b.bind().sync();
+            //结束
             f.channel().closeFuture().sync();
         } finally {
+            //关闭EventLoop组
             group.shutdownGracefully().sync();
         }
     }
