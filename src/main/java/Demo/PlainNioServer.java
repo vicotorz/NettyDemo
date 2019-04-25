@@ -13,11 +13,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * 未使用Netty的异步
  * Created by dell on 2019/4/24.
  */
 public class PlainNioServer {
 
-    public void serve(int port) throws Exception{
+    public void server(int port) throws Exception{
         ServerSocketChannel serverChannel = ServerSocketChannel.open();
         serverChannel.configureBlocking(false);
         ServerSocket ssocket = serverChannel.socket();
@@ -47,6 +48,7 @@ public class PlainNioServer {
                         SocketChannel client = server.accept();
                         client.configureBlocking(false);
                         //接收客户端，并将它注册到选择器
+                        //写数据
                         client.register(selector,SelectionKey.OP_WRITE|SelectionKey.OP_READ,msg.duplicate());
                         System.out.println("Accepted connection from"+client);
                     }
