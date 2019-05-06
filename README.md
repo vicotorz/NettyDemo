@@ -1,5 +1,5 @@
 # NettyDemo
-Netty实战练习
+Netty实战练习编码
 
 mvn exec:java -Dexec.mainClass="NettyDemo.EchoServer" -Dexec.args="8055"
 
