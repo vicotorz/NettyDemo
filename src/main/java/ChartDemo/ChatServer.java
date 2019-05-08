@@ -9,9 +9,11 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.ImmediateEventExecutor;
 
 import java.net.InetSocketAddress;
+import java.security.cert.CertificateException;
 
 /**
  * Created by dell on 2019/5/8.
@@ -43,13 +45,14 @@ public class ChatServer {
         group.shutdownGracefully();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         if(args.length!=1){
             System.out.println("Please give port as argument");
             System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
+
         final ChatServer endpoint = new ChatServer();
         ChannelFuture future = endpoint.start(new InetSocketAddress(port));
 
