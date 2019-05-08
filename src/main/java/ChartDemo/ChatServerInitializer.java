@@ -22,11 +22,11 @@ public class ChatServerInitializer extends ChannelInitializer<Channel> {
 
     protected void initChannel(Channel channel) throws Exception {
         ChannelPipeline pipeline = channel.pipeline();
-        pipeline.addLast(new HttpServerCodec());
-        pipeline.addLast(new ChunkedWriteHandler());
-        pipeline.addLast(new HttpObjectAggregator(64*1024));
-        pipeline.addLast(new HTTPRequestHandler("/ws"));
-        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-        pipeline.addLast(new TextWebSocketFrameHandler(group));
+        pipeline.addLast(new HttpServerCodec());//将HttpRequest，HttpContent，LastHttpContent编码为字节
+        pipeline.addLast(new ChunkedWriteHandler());//写入文件的内容
+        pipeline.addLast(new HttpObjectAggregator(64*1024));//将一个HttpMessage和跟随它的多个HttpContent聚合为单个FullHttpRequest
+        pipeline.addLast(new HTTPRequestHandler("/ws"));//处理FullHttpRequest
+        pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));//处理WebSocket升级握手,PingWebSocketFrame,PongWebSocketFrame和CloseWebSocketFrame
+        pipeline.addLast(new TextWebSocketFrameHandler(group));//处理TextWebSocketFrame和握手完成事件
     }
 }
